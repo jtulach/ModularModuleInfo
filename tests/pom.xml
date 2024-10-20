@@ -14,38 +14,27 @@
             <artifactId>info</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>dsl-processor</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-                -->
     </dependencies>
     <properties>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>8</maven.compiler.release>
         <exec.mainClass>org.apidesign.modular.tests.Tests</exec.mainClass>
     </properties>
 
     <build>
         <plugins>
             <plugin>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.13.0</version>
-                  <configuration>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
                     <annotationProcessorPaths>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>dsl-processor</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+                        <dependency>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>dsl-processor</artifactId>
+                            <version>${project.version}</version>
+                        </dependency>
                     </annotationProcessorPaths>
-                    <annotationProcessors>
-                        <proc>org.apidesign.modular.dsl.processor.ModularProcessor</proc>
-                    </annotationProcessors>
-                  </configuration>
+                </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

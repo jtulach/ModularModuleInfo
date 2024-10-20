@@ -9,7 +9,7 @@
     <artifactId>info</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>8</maven.compiler.release>
         <exec.mainClass>org.apidesign.modular.info.Info</exec.mainClass>
     </properties>
 </project>
