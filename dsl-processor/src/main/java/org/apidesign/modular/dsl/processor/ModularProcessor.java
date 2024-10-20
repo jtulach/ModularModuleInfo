@@ -56,7 +56,7 @@ public final class ModularProcessor extends AbstractProcessor {
 
     private static void generateModuleInfo(FileObject to, String name) throws IOException {
         ClassWriter cw = new ClassWriter(Opcodes.V11);
-        cw.visit(64, Opcodes.ACC_MODULE, "module-info", null, null, null);
+        cw.visit(53, Opcodes.ACC_MODULE, "module-info", null, null, null);
         var mv = cw.visitModule(name, 0, null);
         mv.visitRequire("java.base", 0, null);
         mv.visitEnd();
