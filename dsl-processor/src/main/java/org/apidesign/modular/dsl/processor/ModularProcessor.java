@@ -8,8 +8,12 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
+import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import org.apidesign.modular.info.ModuleInfo;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = Processor.class)
@@ -33,15 +37,11 @@ public final class ModularProcessor extends AbstractProcessor {
             try {
                 var name = e.getAnnotation(ModuleInfo.class).name();
                 var pkg =processingEnv.getElementUtils().getPackageOf(e).toString();
-                        System.err.println("PKG: " + pkg);
-                var clz = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, "", "module-info.java");
-                // var clz = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", "module-info.class");
-                System.err.println("writing to " + clz);
-                var w = clz.openWriter();
-                w.write("module " + name +" {\n");
-                w.write("}\n");
-                w.close();
+                var clz = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", "module-info.class");
+                generateModuleInfo(clz, name);
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Generated " + clz.getName(), e);
             } catch (IOException ex) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, ex.getMessage(), e);
                 ex.printStackTrace();
                 return false;
             }
@@ -54,4 +54,15 @@ public final class ModularProcessor extends AbstractProcessor {
         return SourceVersion.latest();
     }
 
+    private static void generateModuleInfo(FileObject to, String name) throws IOException {
+        ClassWriter cw = new ClassWriter(Opcodes.V11);
+        cw.visit(64, Opcodes.ACC_MODULE, "module-info", null, null, null);
+        var mv = cw.visitModule(name, 0, null);
+        mv.visitRequire("java.base", 0, null);
+        mv.visitEnd();
+        cw.visitEnd();
+        try (java.io.OutputStream os = to.openOutputStream()) {
+            os.write(cw.toByteArray());
+        }
+    }
 }

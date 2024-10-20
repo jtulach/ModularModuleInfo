@@ -20,10 +20,12 @@
             <version>RELEASE140</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>9.7.1</version>
+        </dependency>
     </dependencies>
-    <properties>
-        <exec.mainClass>org.apidesign.modular.dsl.processor.DslProcessor</exec.mainClass>
-    </properties>
     <build>
         <plugins>
             <plugin>
